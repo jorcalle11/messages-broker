@@ -1,0 +1,16 @@
+{
+  "name": "@messages-broker/producer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Jorge Calle @jorcalle11",
+  "license": "MIT",
+  "dependencies": {
+    "casual": "^1.6.0",
+    "@messages-broker/queue": "file:../queue",
+    "@messages-broker/utils": "file:../utils"
+  }
+}
