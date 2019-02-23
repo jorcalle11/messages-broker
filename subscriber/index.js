@@ -4,28 +4,56 @@ const fs = require('fs');
 const path = require('path');
 const queue = require('@messages-broker/queue');
 const utils = require('@messages-broker/utils');
+const cli = require('@messages-broker/cli');
 
 async function receiver() {
   let totalMessagesCount = 0;
+  const queueName = process.env.QUEUE_NAME;
+  let receiveTime = 0;
+  let processingTime = 0;
+
+  const table = cli.table({
+    headers: [
+      'Queue_Name',
+      'Total_Messages_Processed',
+      'Receive_Wait_Time',
+      'Processing_Time'
+    ],
+    initData: [queueName, totalMessagesCount, '0 ms', '0 ms'],
+    title: ' Messages Broker - Subscriber ',
+    styles: {
+      selectedBg: 'black',
+      border: { type: 'line', fg: 'green' }
+    }
+  });
 
   while (true) {
+    const receiveStartTime = Date.now();
     const messages = await queue.receiveMessages();
-    if (!messages.length) {
-      console.log('No messages received');
-    }
+    const receiveEndTime = Date.now();
+    receiveTime = receiveEndTime - receiveStartTime;
 
     for (const message of messages) {
       try {
+        const processingStartTime = Date.now();
         await processMessage(message);
+
         const receiptHandle = message.ReceiptHandle;
         await queue.deleteMessage(receiptHandle);
+        const processingEndTime = Date.now();
         totalMessagesCount++;
+        processingTime = processingEndTime - processingStartTime;
       } catch (error) {
         console.log(`the message ${message.MessageId} couldn't be processed`);
       }
-
-      console.log(`${totalMessagesCount} were processed`);
     }
+
+    table.renderData([
+      process.env.QUEUE_NAME,
+      totalMessagesCount,
+      `${receiveTime} ms`,
+      `${processingTime} ms`
+    ]);
   }
 }
 

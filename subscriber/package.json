@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@messages-broker/queue": "file:../queue",
-    "@messages-broker/utils": "file:../utils"
+    "@messages-broker/utils": "file:../utils",
+    "@messages-broker/cli": "file:../cli"
   }
 }
