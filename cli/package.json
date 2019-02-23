@@ -1,0 +1,15 @@
+{
+  "name": "@messages-broker/cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Jorge Calle @jorcalle11",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.11"
+  }
+}
